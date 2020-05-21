@@ -50,6 +50,36 @@ game_screen = (0, 0, GAME_WINDOW_SIZE[0], GAME_WINDOW_SIZE[1])
 prompt_msg = (85, 450, 517, 690)
 
 
+def img_path(filename):
+    cwd = os.path.dirname(__file__)
+    return os.path.join(cwd, 'image', filename)
+
+
+def wait(btn: Button, haystack=None, timeout=10):  # timeout counts in seconds
+    found = False
+    start_time = perf_counter()
+    while (perf_counter() - start_time) < timeout:
+        if haystack is None:
+            found = btn.visible()
+        else:
+            found = btn.visible_in(haystack)
+
+        if found:
+            break
+
+    if not found:
+        raise TimeoutError('Can not find button: {}'.format(btn))
+
+
+def log(*args):
+    from datetime import datetime
+    now = datetime.now()
+    current_time = now.strftime("[%H:%M:%S]")
+    message = list(args)
+    message.insert(0, current_time)
+    print(' '.join(str(e) for e in message))
+
+
 def countdown_timer(secs):
     print("Start", end="")
     for s in range(secs - 1, 0, -1):
