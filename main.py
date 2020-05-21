@@ -86,11 +86,12 @@ def main():
 
     # main loop starts from here
     try:
+        global resource_ready
+        resource_ready = True  # collect resource in the beginning
         while True:
             log('[Main Loop] troop_status = {}, screen = {}'.format(troop_status, screen))
-            if resource_ready:
-                collect_resource()
 
+            # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
             empty_slot = troop_slot - len(troop_status)
             while empty_slot > 0:
@@ -100,6 +101,13 @@ def main():
                     go_gathering(random.choice(res), half=True)
                 empty_slot -= 1
 
+            # collect resources
+            if resource_ready:
+                collect_resource()
+                resource_ready = False
+                log('Resources collect complete')
+
+            # wait or next loop
             sleep(60)  # main loop every 60 seconds
 
     except IndexError:  # should be happened from getWindowsWithTitle when no wnd title can be found:

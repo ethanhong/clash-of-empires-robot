@@ -273,6 +273,18 @@ def go_kingdom():
         log('go_kingdom complete')
 
 
+def go_castle():
+    while back.visible():
+        back.click()
+        sleep(1)
+    try:
+        wait(kingdom)
+    except TimeoutError:
+        castle.click()
+        wait(kingdom, timeout=60)
+        log('go_castle complete')
+
+
 def go_gathering(res, half=False):
     try:
         go_kingdom()
@@ -305,5 +317,39 @@ def go_gathering(res, half=False):
             wait(avatar)
 
 
-def collect_resource():  # todo: collect resources
-    pass
+def mouse_drag(direction):
+    up, down = (300, 250), (300, 800)
+    left, right = (100, 525), (500, 525)
+    if direction == 'up':
+        pyautogui.moveTo(down[0], down[1])
+        pyautogui.dragTo(up[0], up[1], 2)
+    elif direction == 'down':
+        pyautogui.moveTo(up[0], up[1])
+        pyautogui.dragTo(down[0], down[1], 2)
+    elif direction == 'left':
+        pyautogui.moveTo(right[0], right[1])
+        pyautogui.dragTo(left[0], left[1], 2)
+    elif direction == 'right':
+        pyautogui.moveTo(left[0], left[1])
+        pyautogui.dragTo(right[0], right[1], 2)
+
+
+def collect_resource():
+    delay = 2
+    go_kingdom()
+    go_castle()
+    sleep(delay)
+    mouse_drag('up')
+    sleep(delay)
+    mouse_drag('right')
+    sleep(delay)
+    pyautogui.click((384, 451))
+    pyautogui.click((496, 727))
+    pyautogui.click((211, 782))
+    sleep(delay)
+    mouse_drag('right')
+    sleep(delay)
+    mouse_drag('right')
+    sleep(delay)
+    pyautogui.click((367, 651))
+    go_kingdom()
