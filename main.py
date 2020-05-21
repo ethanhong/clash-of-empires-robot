@@ -102,6 +102,9 @@ def main():
 
             sleep(60)  # main loop every 60 seconds
 
+    except IndexError:  # should be happened from getWindowsWithTitle when no wnd title can be found:
+        pass
+
     except (TimeoutError, TypeError, pyautogui.FailSafeException) as e:
         global fatal_stop
         fatal_stop = True
