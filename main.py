@@ -52,14 +52,14 @@ def resource_ready_timer():
     log('[Thread start] resource ready timer')
     n = 0
     while True:
-        if fatal_stop:
-            log('Stop resource_ready_timer')
-            break
-        sleep(1)
-        n += 1
-        if n >= 3600:  # 1 hour
-            resource_ready = True
-            n = 0
+        while n < 600:
+            if fatal_stop:
+                log('Stop resource_ready_timer')
+                break
+            sleep(1)
+            n += 1
+        resource_ready = True
+        n = 0
 
 
 def main():
