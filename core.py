@@ -54,12 +54,12 @@ class Button:
         haystack = self._haystack()
         return bool(pyautogui.locate(ndl, haystack, confidence=img_match_confidence))
 
-    def visible_in(self, area):
+    def locate_in(self, area):
         filename = img_path(self.img)
         im = PIL.Image.open(filename)
         ndl = resize_by_window(im)
         haystack = pyautogui.screenshot().crop(area)
-        return bool(pyautogui.locate(ndl, haystack, confidence=img_match_confidence))
+        return pyautogui.locate(ndl, haystack, confidence=img_match_confidence)
 
     def _haystack(self):
         filename = img_path(self.img)
@@ -96,6 +96,7 @@ res_coord = [monster, camp, farm, sawmill, iron_mine, slv_mine]
 
 # haystack areas
 prompt_msg = (85, 450, 517, 690)
+game_screen = (0, 0, game_window_size[0], game_window_size[1])
 
 
 def window_pos_ratio():
@@ -131,7 +132,7 @@ def wait(btn: Button, haystack=None, timeout=10):  # timeout counts in seconds
         if haystack is None:
             found = btn.visible()
         else:
-            found = btn.visible_in(haystack)
+            found = btn.locate_in(haystack)
 
         if found:
             break
