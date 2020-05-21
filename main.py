@@ -3,7 +3,6 @@ import random
 import time
 
 from core import *
-from parameter import TROOP_SLOT
 from recovery import recovery
 
 fatal_stop = False
@@ -31,7 +30,7 @@ def ally_help_monitor():
         elif ally_need_help():
             help_ally()
             log('Help ally complete')
-        sleep(1)
+        sleep(10)
 
 
 def troop_status_monitor():
@@ -68,7 +67,6 @@ def main():
     countdown_timer(3)
 
     # setup environment
-    pyautogui_init()
     game_init()
     sleep(1)  # need some time for window stable
 
@@ -83,10 +81,10 @@ def main():
         t = threading.Thread(target=thread)
         t.start()
 
-    go_kingdom()  # go kingdom screen to update troops status
-    sleep(5)  # wait for back ground threads to update status
+    go_kingdom()  # go kingdom screen so we can update troops status
+    sleep(5)  # wait for background threads to update status
 
-    # main loop start here
+    # main loop starts from here
     try:
         while True:
             log('[Main Loop] troop_status = {}, screen = {}'.format(troop_status, screen))
@@ -94,13 +92,15 @@ def main():
                 collect_resource()
 
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
-            empty_slot = TROOP_SLOT - len(troop_status)
+            empty_slot = troop_slot - len(troop_status)
             while empty_slot > 0:
                 if empty_slot == 1:
                     go_gathering(random.choice(res))
                 elif empty_slot >= 2:
                     go_gathering(random.choice(res), half=True)
                 empty_slot -= 1
+
+            sleep(60)  # main loop every 60 seconds
 
     except (TimeoutError, TypeError, pyautogui.FailSafeException) as e:
         global fatal_stop
