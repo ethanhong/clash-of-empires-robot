@@ -286,35 +286,24 @@ def go_castle():
 
 
 def go_gathering(res, half=False):
-    try:
-        go_kingdom()
-        magnifier.click()
-        wait(search)
-        res_coord[res].click()
-        search.click()
-        sleep(5)
-        screen_center.click()
-        gather.click()
-    except (TimeoutError, TypeError):
-        recovery()
-        return
-
-    try:
-        wait(march)
-    except TimeoutError:
+    go_kingdom()
+    magnifier.click()
+    wait(search)
+    res_coord[res].click()
+    search.click()
+    sleep(5)
+    screen_center.click()
+    gather.click()
+    wait(march)
+    if train.visible():
         back.click()
         log('No troops for gathering')
     else:
         if half:
             half_troop.click()
         march.click()
-        try:
-            wait(avatar)
-            log('Troops go gathering {}'.format(res))
-        except TimeoutError:
-            log('No march slot available')
-            back.click(2)
-            wait(avatar)
+        wait(avatar)
+        log('Troops go gathering {}'.format(res))
 
 
 def mouse_drag(direction):
