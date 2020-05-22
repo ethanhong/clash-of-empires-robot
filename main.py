@@ -74,8 +74,8 @@ def main():
     threads = {
         ally_help_monitor,
         troop_status_monitor,
-        # resource_ready_timer,
         # screen_monitor,
+        resource_ready_timer,
     }
     for thread in threads:
         t = threading.Thread(target=thread)
