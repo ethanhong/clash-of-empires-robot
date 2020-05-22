@@ -9,13 +9,15 @@ from parameter import *
 from recovery import recovery
 
 
-class Screen:
-    CASTLE = 'castle'
-    KINGDOM = 'kingdom'
-    DESERT = 'desert'
-    NO_AVATAR = 'no avatar'
-    ERROR = 'error'
-    UNKNOWN = 'unknown'
+# class Screen:
+#     CASTLE = 'castle'
+#     KINGDOM = 'kingdom'
+#     DESERT = 'desert'
+#     NO_AVATAR = 'no avatar'
+#     ERROR = 'error'
+#     UNKNOWN = 'unknown'
+
+
 
 
 class ResType:
@@ -246,17 +248,7 @@ def update_troop_status():
         pass
 
 
-def get_screen():
-    buttons = {
-        desert_camp: Screen.DESERT,  # desert should be check first or it will mis-judge to kingdom
-        back: Screen.NO_AVATAR,
-        castle: Screen.KINGDOM,
-        kingdom: Screen.CASTLE,
     }
-    result = Screen.UNKNOWN
-    for btn, srn in buttons.items():
-        if btn.visible():
-            result = srn
             break
     return result
 

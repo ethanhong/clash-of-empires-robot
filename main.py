@@ -8,17 +8,11 @@ from recovery import recovery
 fatal_stop = False
 resource_ready = False
 troop_status = []
-screen = None
 
 
-def screen_monitor():
-    global screen
-    log('[Thread start] screen monitor')
     while True:
         if fatal_stop:
-            log('Stop screen_monitor')
             break
-        screen = get_screen()
 
 
 def ally_help_monitor():
@@ -74,7 +68,6 @@ def main():
     threads = {
         ally_help_monitor,
         troop_status_monitor,
-        # screen_monitor,
         resource_ready_timer,
     }
     for thread in threads:
@@ -89,7 +82,6 @@ def main():
         global resource_ready
         resource_ready = True  # collect resource in the beginning
         while True:
-            log('[Main Loop] troop_status = {}, screen = {}'.format(troop_status, screen))
 
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
