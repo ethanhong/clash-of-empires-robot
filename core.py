@@ -52,6 +52,8 @@ class Button:
         im = PIL.Image.open(filename)
         ndl = resize_by_window(im)
         haystack = self._haystack()
+        # ndl.save('ndl.png')
+        # haystack.save('hay.png')
         return bool(pyautogui.locate(ndl, haystack, confidence=img_match_confidence))
 
     def locate_in(self, area):
