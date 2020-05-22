@@ -72,20 +72,20 @@ class Button:
 
 
 # buttons
-ally_help = Button('ally_help.png', (471, 907))
+ally_help = Button('ally_help.png', (465, 900))
 kingdom = Button('kingdom.png', (105, 1015))
-castle = Button('castle.png', (49, 1023))
+castle = Button('castle.png', (59, 1023))
 desert_camp = Button('camp.png', (547, 881))
 back = Button('back.png', (31, 80))
-magnifier = Button('magnifier.png', (46, 814))
+magnifier = Button('magnifier.png', (46, 805))
 search = Button('search.png', (297, 1043))
 march = Button('march.png', (505, 1045))
 avatar = Button('avatar.png', (46, 81))
-msg_confirm = Button('', (300, 655))
 screen_center = Button('', (300, 560))
 empty_space = Button('', (441, 111))
 half_troop = Button('', (301, 1049))
 gather = Button('', (434, 569))
+# msg_confirm = Button('', (300, 655))
 monster = Button('', (67, 820))
 camp = Button('', (161, 820))
 farm = Button('', (260, 820))
@@ -95,8 +95,8 @@ slv_mine = Button('', (540, 820))
 res_coord = [monster, camp, farm, sawmill, iron_mine, slv_mine]
 
 # haystack areas
-prompt_msg = (85, 450, 517, 690)
-game_screen = (0, 0, game_window_size[0], game_window_size[1])
+# prompt_msg = (85, 450, 517, 690)
+# game_screen = (0, 0, game_window_size[0], game_window_size[1])
 
 
 def window_pos_ratio():
