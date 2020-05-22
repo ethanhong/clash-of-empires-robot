@@ -6,7 +6,6 @@ import pyautogui
 import pygetwindow as gw
 
 from parameter import *
-from recovery import recovery
 
 
 # class Screen:
@@ -95,7 +94,6 @@ screen_center = Button('', (300, 560))
 empty_space = Button('', (441, 111))
 half_troop = Button('', (301, 1049))
 gather = Button('', (434, 569))
-msg_confirm = Button('', (390, 655))
 monster = Button('', (67, 820))
 camp = Button('', (161, 820))
 farm = Button('', (260, 820))
@@ -106,7 +104,6 @@ res_coord = [monster, camp, farm, sawmill, iron_mine, slv_mine]
 
 # haystack areas
 game_screen = (0, 0, game_window_size[0], game_window_size[1])
-
 
 
 def window_pos_ratio():
