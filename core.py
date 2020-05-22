@@ -20,7 +20,8 @@ from parameter import *
 class MSG:
     CONNECTION_FAIL = 'connection fail'
     MULTI_LOGIN = 'multi login'
-    ABNORMAL_NETWORK = 'abnormal_network'
+    ABNORMAL_NETWORK = 'abnormal network'
+    LOGGED_OUT = 'logged out'
 
 
 class ResType:
@@ -143,6 +144,8 @@ def wait(btn: Button, haystack=None, timeout=10):  # timeout counts in seconds
 
         if found:
             break
+        elif get_error_msg():
+            raise TimeoutError('detect error screen in wait()')
 
     if not found:
         raise TimeoutError('Can not find button: {}'.format(btn))
@@ -257,7 +260,7 @@ def get_error_msg():
     err_screens = {
         MSG.CONNECTION_FAIL: 'msg_connect_fail.png',
         MSG.MULTI_LOGIN: 'msg_multi_login.png',
-        MSG.ABNORMAL_NETWORK: 'msg_abnormal_network.png'
+        MSG.ABNORMAL_NETWORK: 'msg_abnormal_network.png',
     }
     result = None
     msg_area = (163, 505, 445, 539)
@@ -267,6 +270,10 @@ def get_error_msg():
         if pyautogui.locate(img_path(img_path(img)), hay, confidence=0.99, grayscale=True):
             result = msg
             break
+
+    if pyautogui.locateOnScreen(img_path('coe_icon.png'), confidence=0.99):
+        result = MSG.LOGGED_OUT
+
     return result
 
 

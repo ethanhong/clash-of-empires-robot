@@ -1,9 +1,8 @@
-import threading
 import random
+import threading
 import time
 
 from core import *
-from recovery import recovery
 
 fatal_stop = False
 resource_ready = False
@@ -54,16 +53,16 @@ def resource_ready_timer():
         break
 
 
-
-def main():
-    # countdown to start
-    countdown_timer(3)
-
-    # setup environment
+def initialize():
     game_init()
     sleep(1)  # need some time for window stable
 
+
+def main():
+    global fatal_stop
+
     # initialize threads
+    fatal_stop = False
     threads = {
         ally_help_monitor,
         troop_status_monitor,
@@ -73,11 +72,14 @@ def main():
         t = threading.Thread(target=thread)
         t.start()
 
-    go_kingdom()  # go kingdom screen so we can update troops status
-    sleep(5)  # wait for background threads to update status
-
     # main loop starts from here
     try:
+        # go kingdom screen so we can update troops status
+        go_kingdom()
+
+        # wait for background threads to update status
+        sleep(5)
+
         global resource_ready
         resource_ready = True  # collect resource in the beginning
         while True:
@@ -100,8 +102,14 @@ def main():
                 resource_ready = False
                 log('Resources collect complete')
 
-            # wait or next loop
-            sleep(60)  # main loop every 60 seconds
+            # wait or next loop and
+            n = 0
+            while n < 60:
+                if get_error_msg():  # check err_msg while waiting next loop
+                    log('Detected error screen when waiting next main loop start')
+                    raise TimeoutError('main.py')
+                sleep(1)
+                n += 1
 
             # trying to keep connection alive
             empty_space.click()
@@ -110,12 +118,65 @@ def main():
         pass
 
     except (TimeoutError, TypeError, pyautogui.FailSafeException) as e:
-        global fatal_stop
         fatal_stop = True
+        while threading.activeCount() > 1:  # wait for thread stopping
+            continue
+        recovery(e)
+
+
+def internet_on():
+    import urllib.request
+    import urllib.error
+    try:
+        urllib.request.urlopen('http://216.58.192.142', timeout=10)
+        return True
+    except urllib.error.URLError as err:
+        return False
+
+
+def recovery(err):
+    log('[Start recover flow]')
+    em = get_error_msg()
+    log('Error message:', em)
+    if em == MSG.MULTI_LOGIN:
+        log('Waiting for {} seconds to reconnect'.format(multi_login_restart_delay))
+        sleep(multi_login_restart_delay)
+        msg_confirm.click()
+        sleep(60)
+        empty_space.click()
+        main()
+
+    elif em == MSG.CONNECTION_FAIL:
+        msg_confirm.click()
+        sleep(60)
+        empty_space.click()
+        main()
+
+    elif em == MSG.ABNORMAL_NETWORK:
+        log('Checking internet status ...')
+        while not internet_on():
+            sleep(1)
+        log('Internet status: OK')
+        msg_confirm.click()
+        sleep(60)
+
+    elif em == MSG.LOGGED_OUT:
+        log('Checking internet status ...')
+        while not internet_on():
+            sleep(1)
+        log('Internet status: OK')
+        pos = pyautogui.locateCenterOnScreen(img_path('coe_icon.png'), confidence=0.99)
+        pyautogui.click(pos)
+        sleep(60)
+        main()
+
+    else:
+        log('Can not recognise the error')
         pyautogui.screenshot().save('err_' + time.strftime('%m%d%H%M%S', time.localtime()) + '.png')
-        recovery()
-        raise Exception(e)
+        raise Exception(err)
 
 
 if __name__ == '__main__':
+    countdown_timer(3)
+    initialize()
     main()

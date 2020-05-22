@@ -14,6 +14,7 @@ win_title = ['BS1']
 # Robot setting
 delay_between_clicks = 1.00  # set higher when the game does not run smoothly
 img_match_confidence = 0.8
+multi_login_restart_delay = 600  # 10 minutes
 
 
 # Constants
