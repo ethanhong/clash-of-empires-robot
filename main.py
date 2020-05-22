@@ -110,6 +110,9 @@ def main():
             # wait or next loop
             sleep(60)  # main loop every 60 seconds
 
+            # trying to keep connection alive
+            empty_space.click()
+
     except IndexError:  # should be happened from getWindowsWithTitle when no wnd title can be found:
         pass
 
