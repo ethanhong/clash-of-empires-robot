@@ -18,6 +18,10 @@ from recovery import recovery
 #     UNKNOWN = 'unknown'
 
 
+class MSG:
+    CONNECTION_FAIL = 'connection fail'
+    MULTI_LOGIN = 'multi login'
+    ABNORMAL_NETWORK = 'abnormal_network'
 
 
 class ResType:
@@ -97,7 +101,6 @@ slv_mine = Button('', (540, 820))
 res_coord = [monster, camp, farm, sawmill, iron_mine, slv_mine]
 
 # haystack areas
-prompt_msg = (85, 450, 517, 690)
 game_screen = (0, 0, game_window_size[0], game_window_size[1])
 
 
@@ -248,7 +251,19 @@ def update_troop_status():
         pass
 
 
+def get_error_msg():
+    err_screens = {
+        MSG.CONNECTION_FAIL: 'msg_connect_fail.png',
+        MSG.MULTI_LOGIN: 'msg_multi_login.png',
+        MSG.ABNORMAL_NETWORK: 'msg_abnormal_network.png'
     }
+    result = None
+    msg_area = (163, 505, 445, 539)
+    hay = pyautogui.screenshot().crop(msg_area)
+
+    for msg, img in err_screens.items():
+        if pyautogui.locate(img_path(img_path(img)), hay, confidence=0.99, grayscale=True):
+            result = msg
             break
     return result
 

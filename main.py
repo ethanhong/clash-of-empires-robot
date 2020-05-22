@@ -8,11 +8,17 @@ from recovery import recovery
 fatal_stop = False
 resource_ready = False
 troop_status = []
+err_msg = None
 
 
+def err_message_monitor():
+    global err_msg
+    log('[Thread start] error message monitor')
     while True:
         if fatal_stop:
+            log('Stop err_message_monitor')
             break
+        err_msg = get_error_msg()
 
 
 def ally_help_monitor():
@@ -69,6 +75,7 @@ def main():
         ally_help_monitor,
         troop_status_monitor,
         resource_ready_timer,
+        err_message_monitor,
     }
     for thread in threads:
         t = threading.Thread(target=thread)
@@ -82,6 +89,7 @@ def main():
         global resource_ready
         resource_ready = True  # collect resource in the beginning
         while True:
+            log('[Main Loop] troop_status = {}, err_mag = {}'.format(troop_status, err_msg))
 
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
