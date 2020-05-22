@@ -58,8 +58,12 @@ def resource_ready_timer():
                 break
             sleep(1)
             n += 1
-        resource_ready = True
-        n = 0
+        else:
+            resource_ready = True
+            n = 0
+            continue
+        break
+
 
 
 def main():
