@@ -322,16 +322,16 @@ def mouse_drag(direction):
     left, right = (100, 525), (500, 525)
     if direction == 'up':
         pyautogui.moveTo(down[0], down[1])
-        pyautogui.dragTo(up[0], up[1], 2)
+        pyautogui.dragTo(up[0], up[1], 3)
     elif direction == 'down':
         pyautogui.moveTo(up[0], up[1])
-        pyautogui.dragTo(down[0], down[1], 2)
+        pyautogui.dragTo(down[0], down[1], 3)
     elif direction == 'left':
         pyautogui.moveTo(right[0], right[1])
-        pyautogui.dragTo(left[0], left[1], 2)
+        pyautogui.dragTo(left[0], left[1], 3)
     elif direction == 'right':
         pyautogui.moveTo(left[0], left[1])
-        pyautogui.dragTo(right[0], right[1], 2)
+        pyautogui.dragTo(right[0], right[1], 3)
 
 
 def collect_resource():
@@ -344,12 +344,15 @@ def collect_resource():
     mouse_drag('right')
     sleep(delay)
     pyautogui.click((384, 451))
-    pyautogui.click((496, 727))
-    pyautogui.click((211, 782))
+    pyautogui.click((482, 717))
+    pyautogui.click((337, 693))
+    pyautogui.click((44, 329))
     sleep(delay)
     mouse_drag('right')
     sleep(delay)
     mouse_drag('right')
     sleep(delay)
-    pyautogui.click((367, 651))
+    pyautogui.click((359, 641))
+    pyautogui.click((181, 645))
+    pyautogui.click((242, 282))
     go_kingdom()
