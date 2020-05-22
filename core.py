@@ -9,13 +9,19 @@ from parameter import *
 from recovery import recovery
 
 
-class Screen:
-    CASTLE = 'castle'
-    KINGDOM = 'kingdom'
-    DESERT = 'desert'
-    NO_AVATAR = 'no avatar'
-    ERROR = 'error'
-    UNKNOWN = 'unknown'
+# class Screen:
+#     CASTLE = 'castle'
+#     KINGDOM = 'kingdom'
+#     DESERT = 'desert'
+#     NO_AVATAR = 'no avatar'
+#     ERROR = 'error'
+#     UNKNOWN = 'unknown'
+
+
+class MSG:
+    CONNECTION_FAIL = 'connection fail'
+    MULTI_LOGIN = 'multi login'
+    ABNORMAL_NETWORK = 'abnormal_network'
 
 
 class ResType:
@@ -83,11 +89,13 @@ magnifier = Button('magnifier.png', (46, 805))
 search = Button('search.png', (297, 1043))
 march = Button('march.png', (505, 1045))
 avatar = Button('avatar.png', (46, 81))
+train = Button('train.png', (408, 548))
+msg_confirm = Button('', (390, 655))
 screen_center = Button('', (300, 560))
 empty_space = Button('', (441, 111))
 half_troop = Button('', (301, 1049))
 gather = Button('', (434, 569))
-# msg_confirm = Button('', (300, 655))
+msg_confirm = Button('', (390, 655))
 monster = Button('', (67, 820))
 camp = Button('', (161, 820))
 farm = Button('', (260, 820))
@@ -97,8 +105,8 @@ slv_mine = Button('', (540, 820))
 res_coord = [monster, camp, farm, sawmill, iron_mine, slv_mine]
 
 # haystack areas
-# prompt_msg = (85, 450, 517, 690)
-# game_screen = (0, 0, game_window_size[0], game_window_size[1])
+game_screen = (0, 0, game_window_size[0], game_window_size[1])
+
 
 
 def window_pos_ratio():
@@ -248,17 +256,19 @@ def update_troop_status():
         pass
 
 
-def get_screen():
-    buttons = {
-        desert_camp: Screen.DESERT,  # desert should be check first or it will mis-judge to kingdom
-        back: Screen.NO_AVATAR,
-        castle: Screen.KINGDOM,
-        kingdom: Screen.CASTLE,
+def get_error_msg():
+    err_screens = {
+        MSG.CONNECTION_FAIL: 'msg_connect_fail.png',
+        MSG.MULTI_LOGIN: 'msg_multi_login.png',
+        MSG.ABNORMAL_NETWORK: 'msg_abnormal_network.png'
     }
-    result = Screen.UNKNOWN
-    for btn, srn in buttons.items():
-        if btn.visible():
-            result = srn
+    result = None
+    msg_area = (163, 505, 445, 539)
+    hay = pyautogui.screenshot().crop(msg_area)
+
+    for msg, img in err_screens.items():
+        if pyautogui.locate(img_path(img_path(img)), hay, confidence=0.99, grayscale=True):
+            result = msg
             break
     return result
 
@@ -288,35 +298,24 @@ def go_castle():
 
 
 def go_gathering(res, half=False):
-    try:
-        go_kingdom()
-        magnifier.click()
-        wait(search)
-        res_coord[res].click()
-        search.click()
-        sleep(5)
-        screen_center.click()
-        gather.click()
-    except (TimeoutError, TypeError):
-        recovery()
-        return
-
-    try:
-        wait(march)
-    except TimeoutError:
+    go_kingdom()
+    magnifier.click()
+    wait(search)
+    res_coord[res].click()
+    search.click()
+    sleep(5)
+    screen_center.click()
+    gather.click()
+    wait(march)
+    if train.visible():
         back.click()
         log('No troops for gathering')
     else:
         if half:
             half_troop.click()
         march.click()
-        try:
-            wait(avatar)
-            log('Troops go gathering {}'.format(res))
-        except TimeoutError:
-            log('No march slot available')
-            back.click(2)
-            wait(avatar)
+        wait(avatar)
+        log('Troops go gathering {}'.format(res))
 
 
 def mouse_drag(direction):

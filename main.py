@@ -8,17 +8,17 @@ from recovery import recovery
 fatal_stop = False
 resource_ready = False
 troop_status = []
-screen = None
+err_msg = None
 
 
-def screen_monitor():
-    global screen
-    log('[Thread start] screen monitor')
+def err_message_monitor():
+    global err_msg
+    log('[Thread start] error message monitor')
     while True:
         if fatal_stop:
-            log('Stop screen_monitor')
+            log('Stop err_message_monitor')
             break
-        screen = get_screen()
+        err_msg = get_error_msg()
 
 
 def ally_help_monitor():
@@ -74,8 +74,8 @@ def main():
     threads = {
         ally_help_monitor,
         troop_status_monitor,
-        # resource_ready_timer,
-        # screen_monitor,
+        resource_ready_timer,
+        err_message_monitor,
     }
     for thread in threads:
         t = threading.Thread(target=thread)
@@ -89,7 +89,7 @@ def main():
         global resource_ready
         resource_ready = True  # collect resource in the beginning
         while True:
-            log('[Main Loop] troop_status = {}, screen = {}'.format(troop_status, screen))
+            log('[Main Loop] troop_status = {}, err_mag = {}'.format(troop_status, err_msg))
 
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
@@ -109,6 +109,9 @@ def main():
 
             # wait or next loop
             sleep(60)  # main loop every 60 seconds
+
+            # trying to keep connection alive
+            empty_space.click()
 
     except IndexError:  # should be happened from getWindowsWithTitle when no wnd title can be found:
         pass
