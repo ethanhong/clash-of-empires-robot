@@ -81,7 +81,7 @@ def main():
         global resource_ready
         resource_ready = True  # collect resource in the beginning
         while True:
-            log('[Main Loop] troop_status = {}, err_mag = {}'.format(troop_status))
+            log('[Main Loop] troop_status = {}'.format(troop_status))
 
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
@@ -95,6 +95,7 @@ def main():
 
             # collect resources
             if resource_ready:
+                log('Go collecting resources')
                 collect_resource()
                 resource_ready = False
                 log('Resources collect complete')
