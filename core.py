@@ -372,4 +372,5 @@ def collect_tribute():
         pyautogui.click((300, 620))
         sleep(3)
         empty_space.click()
+    go_kingdom()
 
