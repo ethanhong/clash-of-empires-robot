@@ -343,7 +343,7 @@ def collect_resource():
     go_kingdom()
     go_castle()
 
-    empty_space.click()
+    empty_space.click()  # grab window focus
 
     key_press('up')
     key_press('right', 2)
@@ -358,3 +358,18 @@ def collect_resource():
     key_press('down')
     find_click(res_ready_img)
     go_kingdom()
+
+
+def collect_tribute():
+    go_kingdom()
+    go_castle()
+    empty_space.click()  # grab window focus
+    key_press('left', 3)
+    pos = pyautogui.locateCenterOnScreen(img_path('tribute.png'), confidence=0.8)
+    if pos:
+        pyautogui.click(pos)
+        sleep(3)
+        pyautogui.click((300, 620))
+        sleep(3)
+        empty_space.click()
+

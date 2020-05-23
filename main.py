@@ -61,6 +61,7 @@ def main():
         sleep(5)
 
         resource_collect_time = 0
+        tribute_collect_time = 0
         while True:
             # log('[Main Loop] troop_status = {}'.format(troop_status))
 
@@ -80,6 +81,13 @@ def main():
                 collect_resource()
                 resource_collect_time = perf_counter()
                 log('Resources collect complete')
+
+            # collect tribute
+            if perf_counter() - tribute_collect_time > 1800:  # every 30 minutes:
+                log('Go collecting tribute')
+                collect_tribute()
+                tribute_collect_time = perf_counter()
+                log('Tribute collect complete')
 
             # wait or next loop and
             n = 0
