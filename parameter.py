@@ -7,8 +7,8 @@ troop_slot = 3
 # set it equal to GAME_BASE_SIZE when you are making needles
 # game_window_size = (307, 585)
 game_window_size = (600, 1105)
-# win_title = ['BlueStacks']
-win_title = ['BS1']
+win_title = ['BlueStacks']
+# win_title = ['BS1']
 
 
 # Robot setting

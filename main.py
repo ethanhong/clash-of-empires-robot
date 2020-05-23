@@ -5,7 +5,7 @@ import time
 from core import *
 
 fatal_stop = False
-troop_status = []
+# troop_status = []
 
 
 def ally_help_monitor():
@@ -20,18 +20,18 @@ def ally_help_monitor():
         sleep(10)
 
 
-def troop_status_monitor():
-    global troop_status
-    log('[Thread start] troop status monitor')
-    while True:
-        if fatal_stop:
-            log('Stop troop_status_monitor')
-            break
-        temp = update_troop_status()
-        if temp is None:
-            pass
-        else:
-            troop_status = temp
+# def troop_status_monitor():
+#     global troop_status
+#     log('[Thread start] troop status monitor')
+#     while True:
+#         if fatal_stop:
+#             log('Stop troop_status_monitor')
+#             break
+#         temp = update_troop_status()
+#         if temp is None:
+#             pass
+#         else:
+#             troop_status = temp
 
 
 def initialize():
@@ -46,7 +46,7 @@ def main():
     fatal_stop = False
     threads = {
         ally_help_monitor,
-        troop_status_monitor,
+        # troop_status_monitor,
     }
     for thread in threads:
         t = threading.Thread(target=thread)
@@ -63,11 +63,12 @@ def main():
         resource_collect_time = 0
         tribute_collect_time = 0
         while True:
-            log('[Main Loop] troop_status = {}'.format(troop_status))
 
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
+            troop_status = update_troop_status()
             empty_slot = troop_slot - len(troop_status)
+            # log('[Main Loop] troop_status = {}'.format(troop_status))
             while empty_slot > 0:
                 if empty_slot == 1:
                     go_gathering(random.choice(res))
@@ -89,13 +90,13 @@ def main():
                 tribute_collect_time = time.time()
                 log('Tribute collect complete')
 
-            # wait or next loop and
-            n = 0
-            while n < 60:  # about 106 seconds
-                if get_error_msg():  # check err_msg while waiting next loop
-                    log('Detected error screen when waiting next main loop start')
-                    raise TimeoutError('main.py')
-                n += 1
+            # # wait or next loop and
+            # n = 0
+            # while n < 60:  # about 106 seconds
+            #     if get_error_msg():  # check err_msg while waiting next loop
+            #         log('Detected error screen when waiting next main loop start')
+            #         raise TimeoutError('main.py')
+            #     n += 1
 
             # trying to keep connection alive
             empty_space.click()
