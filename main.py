@@ -113,6 +113,12 @@ def main():
             continue
         recovery(e)
 
+    except (KeyboardInterrupt, SystemExit):  # interrupt by user
+        fatal_stop = True
+        while threading.activeCount() > 1:  # wait for thread stopping
+            continue
+        log('Interrupt by user')
+
 
 def internet_on():
     import urllib.request
