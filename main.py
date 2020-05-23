@@ -83,11 +83,10 @@ def main():
 
             # wait or next loop and
             n = 0
-            while n < 60:
+            while n < 60:  # about 106 seconds
                 if get_error_msg():  # check err_msg while waiting next loop
                     log('Detected error screen when waiting next main loop start')
                     raise TimeoutError('main.py')
-                sleep(1)
                 n += 1
 
             # trying to keep connection alive
