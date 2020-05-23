@@ -5,7 +5,6 @@ import time
 from core import *
 
 fatal_stop = False
-resource_ready = False
 troop_status = []
 
 
@@ -35,24 +34,6 @@ def troop_status_monitor():
             troop_status = temp
 
 
-def resource_ready_timer():
-    global resource_ready
-    log('[Thread start] resource ready timer')
-    n = 0
-    while True:
-        while n < 600:
-            if fatal_stop:
-                log('Stop resource_ready_timer')
-                break
-            sleep(1)
-            n += 1
-        else:
-            resource_ready = True
-            n = 0
-            continue
-        break
-
-
 def initialize():
     game_init()
     sleep(1)  # need some time for window stable
@@ -66,7 +47,6 @@ def main():
     threads = {
         ally_help_monitor,
         troop_status_monitor,
-        resource_ready_timer,
     }
     for thread in threads:
         t = threading.Thread(target=thread)
@@ -80,10 +60,9 @@ def main():
         # wait for background threads to update status
         sleep(5)
 
-        global resource_ready
-        resource_ready = True  # collect resource in the beginning
+        resource_collect_time = 0
         while True:
-            log('[Main Loop] troop_status = {}'.format(troop_status))
+            # log('[Main Loop] troop_status = {}'.format(troop_status))
 
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
@@ -96,10 +75,10 @@ def main():
                 empty_slot -= 1
 
             # collect resources
-            if resource_ready:
+            if perf_counter() - resource_collect_time > 1200:  # every 20 minutes
                 log('Go collecting resources')
                 collect_resource()
-                resource_ready = False
+                resource_collect_time = perf_counter()
                 log('Resources collect complete')
 
             # wait or next loop and
