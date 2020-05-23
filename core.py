@@ -253,7 +253,7 @@ def update_troop_status():
                     log('File is missing:', img_path(img))
         return result
     else:
-        pass
+        return None
 
 
 def get_error_msg():

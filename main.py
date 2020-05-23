@@ -67,7 +67,10 @@ def main():
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
             troop_status = update_troop_status()
-            empty_slot = troop_slot - len(troop_status)
+            if troop_status is None:
+                empty_slot = 0
+            else:
+                empty_slot = troop_slot - len(troop_status)
             # log('[Main Loop] troop_status = {}'.format(troop_status))
             while empty_slot > 0:
                 if empty_slot == 1:
