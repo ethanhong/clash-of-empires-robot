@@ -102,7 +102,7 @@ def main():
             #     n += 1
 
             # trying to keep connection alive
-            empty_space.click()
+            # empty_space.click()
 
     except IndexError:  # should be happened from getWindowsWithTitle when no wnd title can be found:
         pass
