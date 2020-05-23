@@ -63,7 +63,7 @@ def main():
         resource_collect_time = 0
         tribute_collect_time = 0
         while True:
-            # log('[Main Loop] troop_status = {}'.format(troop_status))
+            log('[Main Loop] troop_status = {}'.format(troop_status))
 
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
@@ -76,17 +76,17 @@ def main():
                 empty_slot -= 1
 
             # collect resources
-            if perf_counter() - resource_collect_time > 1200:  # every 20 minutes
+            if time.time() - resource_collect_time > 1200:  # every 20 minutes
                 log('Go collecting resources')
                 collect_resource()
-                resource_collect_time = perf_counter()
+                resource_collect_time = time.time()
                 log('Resources collect complete')
 
             # collect tribute
-            if perf_counter() - tribute_collect_time > 1800:  # every 30 minutes:
+            if time.time() - tribute_collect_time > 1800:  # every 30 minutes:
                 log('Go collecting tribute')
                 collect_tribute()
-                tribute_collect_time = perf_counter()
+                tribute_collect_time = time.time()
                 log('Tribute collect complete')
 
             # wait or next loop and
