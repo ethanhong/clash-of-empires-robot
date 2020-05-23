@@ -112,9 +112,11 @@ def main():
             # log('[Main Loop] troop_status = {}'.format(troop_status))
             while empty_slot > 0:
                 if empty_slot == 1:
-                    go_gathering(random.choice(res))
+                    if not gather_super_mine():
+                        go_gathering(random.choice(res))
                 elif empty_slot >= 2:
-                    go_gathering(random.choice(res), half=True)
+                    if not gather_super_mine(half=True):
+                        go_gathering(random.choice(res), half=True)
                 empty_slot -= 1
 
             # collect resources

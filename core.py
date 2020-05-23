@@ -94,7 +94,7 @@ msg_confirm = Button('', (390, 655))
 screen_center = Button('', (300, 560))
 empty_space = Button('', (441, 111))
 half_troop = Button('', (301, 1049))
-gather = Button('', (434, 569))
+gather = Button('gather.png', (434, 569))
 monster = Button('', (67, 820))
 camp = Button('', (161, 820))
 farm = Button('', (260, 820))
@@ -378,3 +378,49 @@ def collect_tribute():
         sleep(3)
         empty_space.click()
     go_kingdom()
+
+
+def click(x, y, delay=delay_between_clicks):
+    pyautogui.click(x, y)
+    sleep(delay)
+
+
+def gather_super_mine(half=False):
+    coord = [
+        (153, 560),  # farm
+        (445, 560),  # sawmill
+        (153, 828),  # iron mine
+        (445, 828),  # silver mine
+    ]
+    click(532, 1051)  # alliance
+    click(91, 595)  # territory
+    click(363, 175)  # alliance super mine
+    for c in coord:
+        click(c[0], c[1])
+        try:
+            wait(castle)
+            break
+        except TimeoutError:
+            continue
+    else:
+        go_castle()
+        log('No super mine available')
+        return False
+    screen_center.click()
+    sleep(3)
+    if gather.visible():
+        gather.click()
+    else:
+        log('Troop in super mine already')
+        return False
+    wait(march)
+    if train.visible():
+        back.click()
+        log('No troops for gathering')
+    else:
+        if half:
+            half_troop.click()
+        march.click()
+        wait(avatar)
+        log('Go gathering super mine')
+    return True
