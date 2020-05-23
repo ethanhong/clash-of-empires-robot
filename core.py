@@ -322,42 +322,39 @@ def go_gathering(res, half=False):
         log('Troops go gathering {}'.format(res))
 
 
-def mouse_drag(direction):
-    up, down = (300, 250), (300, 800)
-    left, right = (100, 525), (500, 525)
-    if direction == 'up':
-        pyautogui.moveTo(down[0], down[1])
-        pyautogui.dragTo(up[0], up[1], 3)
-    elif direction == 'down':
-        pyautogui.moveTo(up[0], up[1])
-        pyautogui.dragTo(down[0], down[1], 3)
-    elif direction == 'left':
-        pyautogui.moveTo(right[0], right[1])
-        pyautogui.dragTo(left[0], left[1], 3)
-    elif direction == 'right':
-        pyautogui.moveTo(left[0], left[1])
-        pyautogui.dragTo(right[0], right[1], 3)
+def key_press(key, n=1):
+    for _ in range(n):
+        pyautogui.press(key, interval=1)
+        sleep(1)
+
+
+def find_click(images):
+    for img in images:
+        pos = pyautogui.locateCenterOnScreen(img_path(img), confidence=0.9)
+        if pos:
+            pyautogui.click(pos)
+            images.remove(img)
+            sleep(1)
 
 
 def collect_resource():
-    delay = 2
+    res_ready_img = ['ready_food.png', 'ready_wood.png', 'ready_iron.png', 'ready_silver.png', 'ready_gold.png']
+
     go_kingdom()
     go_castle()
-    sleep(delay)
-    mouse_drag('up')
-    sleep(delay)
-    mouse_drag('right')
-    sleep(delay)
-    pyautogui.click((384, 451))
-    pyautogui.click((482, 717))
-    pyautogui.click((337, 693))
-    pyautogui.click((44, 329))
-    sleep(delay)
-    mouse_drag('right')
-    sleep(delay)
-    mouse_drag('right')
-    sleep(delay)
-    pyautogui.click((359, 641))
-    pyautogui.click((181, 645))
-    pyautogui.click((242, 282))
+
+    empty_space.click()
+
+    key_press('up')
+    key_press('right', 2)
+    find_click(res_ready_img)
+
+    key_press('up')
+    find_click(res_ready_img)
+
+    key_press('right', 2)
+    find_click(res_ready_img)
+
+    key_press('down')
+    find_click(res_ready_img)
     go_kingdom()
