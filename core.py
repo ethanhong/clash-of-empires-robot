@@ -325,16 +325,18 @@ def go_gathering(res, half=False):
 def key_press(key, n=1):
     for _ in range(n):
         pyautogui.press(key, interval=1)
-        sleep(1)
+        sleep(3)
 
 
 def find_click(images):
+    haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
     for img in images:
-        pos = pyautogui.locateCenterOnScreen(img_path(img), confidence=0.9)
+        pos = pyautogui.locate(img_path(img), haystack, confidence=0.9)
         if pos:
+            pos = pyautogui.center(pos)
             pyautogui.click(pos)
             images.remove(img)
-            sleep(1)
+            sleep(3)
 
 
 def collect_resource():
@@ -365,8 +367,10 @@ def collect_tribute():
     go_castle()
     empty_space.click()  # grab window focus
     key_press('left', 3)
-    pos = pyautogui.locateCenterOnScreen(img_path('tribute.png'), confidence=0.8)
+    haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
+    pos = pyautogui.locate(img_path('tribute.png'), haystack, confidence=0.8)
     if pos:
+        pos = pyautogui.center(pos)
         pyautogui.click(pos)
         sleep(3)
         pyautogui.click((300, 620))
