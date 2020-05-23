@@ -5,10 +5,14 @@ import time
 from core import *
 
 fatal_stop = False
+game_windows = []
+resource_collect_time = []
+tribute_collect_time = []
 # troop_status = []
 
 
 def ally_help_monitor():
+    global fatal_stop
     log('[Thread start] ally help monitor')
     while True:
         if fatal_stop:
@@ -35,8 +39,40 @@ def ally_help_monitor():
 
 
 def initialize():
-    game_init()
-    sleep(1)  # need some time for window stable
+    # grab game windows
+    global game_windows
+    game_windows = game_windows = gw.getWindowsWithTitle('BS')
+
+    # setup game windows
+    for hwnd in game_windows:
+        hwnd.moveTo(0, 0)
+        hwnd.resizeTo(game_window_size[0], game_window_size[1])
+        hwnd.minimize()
+    game_windows[0].restore()
+
+    # initialize parameters
+    global resource_collect_time
+    global tribute_collect_time
+    for _ in game_windows:
+        resource_collect_time.append(0)
+        tribute_collect_time.append(0)
+    #
+    # game_init()
+    # sleep(1)  # need some time for window stable
+
+
+def switch_window():
+    global game_windows
+    global resource_collect_time
+    global tribute_collect_time
+
+    game_windows.append(game_windows.pop(0))
+    game_windows[-1].minimize()
+    game_windows[0].restore()
+
+    resource_collect_time.append(resource_collect_time.pop(0))
+    tribute_collect_time.append(tribute_collect_time.pop(0))
+    log('Window switched')
 
 
 def main():
@@ -60,8 +96,10 @@ def main():
         # wait for background threads to update status
         sleep(5)
 
-        resource_collect_time = 0
-        tribute_collect_time = 0
+        global resource_collect_time
+        global tribute_collect_time
+        window_switch_time = time.time()
+        empty_slot = 0
         while True:
 
             # dispatch troops to gather
@@ -80,18 +118,25 @@ def main():
                 empty_slot -= 1
 
             # collect resources
-            if time.time() - resource_collect_time > 1200:  # every 20 minutes
+            if time.time() - resource_collect_time[0] > 1200:  # every 20 minutes
                 log('Go collecting resources')
                 collect_resource()
-                resource_collect_time = time.time()
+                resource_collect_time[0] = time.time()
                 log('Resources collect complete')
 
             # collect tribute
-            if time.time() - tribute_collect_time > 1800:  # every 30 minutes:
+            if time.time() - tribute_collect_time[0] > 1800:  # every 30 minutes:
                 log('Go collecting tribute')
                 collect_tribute()
-                tribute_collect_time = time.time()
+                tribute_collect_time[0] = time.time()
                 log('Tribute collect complete')
+
+            # switch window
+            if len(game_windows) > 1 and time.time() - window_switch_time > 600:  # every 10 minutes
+                switch_window()
+                window_switch_time = time.time()
+
+            sleep(10)
 
             # # wait or next loop and
             # n = 0

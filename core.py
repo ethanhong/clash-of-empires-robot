@@ -169,12 +169,12 @@ def countdown_timer(secs):
     print("..GO!")
 
 
-def game_init():
-    log('Initialize game window')
-    bs = gw.getWindowsWithTitle(win_title[0])[0]
-    bs.restore()
-    bs.moveTo(0, 0)
-    bs.resizeTo(game_window_size[0], game_window_size[1])
+# def game_init():
+#     log('Initialize game window')
+#     bs = gw.getWindowsWithTitle(win_title[0])[0]
+#     bs.restore()
+#     bs.moveTo(0, 0)
+#     bs.resizeTo(game_window_size[0], game_window_size[1])
 
 
 def ally_need_help():
