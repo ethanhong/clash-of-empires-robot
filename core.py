@@ -321,22 +321,24 @@ def go_gathering(res, half=False):
         wait(avatar)
         log('Troops go gathering {}'.format(res))
 
-
-def key_press(key, n=1):
-    for _ in range(n):
-        pyautogui.press(key, interval=1)
-        sleep(3)
+#
+# def key_press(key, n=1):
+#     for _ in range(n):
+#         pyautogui.press(key, interval=1)
+#         sleep(3)
 
 
 def find_click(images):
     haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
     for img in images:
-        pos = pyautogui.locate(img_path(img), haystack, confidence=0.9)
+        pos = pyautogui.locate(img_path(img), haystack, confidence=0.8)
         if pos:
             pos = pyautogui.center(pos)
             pyautogui.click(pos)
             images.remove(img)
             sleep(3)
+            return True
+    return False
 
 
 def collect_resource():
@@ -347,17 +349,16 @@ def collect_resource():
 
     empty_space.click()  # grab window focus
 
-    key_press('up')
-    key_press('right', 2)
+    pyautogui.typewrite(['up', 'right', 'right'], interval=delay_between_clicks)
     find_click(res_ready_img)
 
-    key_press('up')
+    pyautogui.typewrite(['up'], interval=delay_between_clicks)
     find_click(res_ready_img)
 
-    key_press('right', 2)
+    pyautogui.typewrite(['right', 'right', 'right'], interval=delay_between_clicks)
     find_click(res_ready_img)
 
-    key_press('down')
+    pyautogui.typewrite(['down'], interval=delay_between_clicks)
     find_click(res_ready_img)
     go_kingdom()
 
@@ -366,7 +367,7 @@ def collect_tribute():
     go_kingdom()
     go_castle()
     empty_space.click()  # grab window focus
-    key_press('left', 3)
+    pyautogui.typewrite(['left', 'left', 'left'], interval=delay_between_clicks)
     haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
     pos = pyautogui.locate(img_path('tribute.png'), haystack, confidence=0.8)
     if pos:
@@ -377,4 +378,3 @@ def collect_tribute():
         sleep(3)
         empty_space.click()
     go_kingdom()
-
