@@ -354,8 +354,6 @@ def find_click(images):
             pyautogui.click(pos)
             images.remove(img)
             sleep(3)
-            return True
-    return False
 
 
 def collect_resource():
