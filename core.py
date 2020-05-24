@@ -417,8 +417,10 @@ def gather_super_mine(half=False):
         (153, 560),  # farm
         (445, 560),  # sawmill
         (153, 828),  # iron mine
-        (445, 828),  # silver mine
     ]
+    if gather_silver_super_mine:
+        coord.append((445, 828))  # silver mine
+
     click(532, 1051)  # alliance
     click(91, 595)  # territory
     click(363, 175)  # alliance super mine
