@@ -382,16 +382,16 @@ def collect_tribute():
     go_kingdom()
     go_castle()
     empty_space.click()  # grab window focus
-    pyautogui.typewrite(['left', 'left', 'left'], interval=delay_between_clicks)
+    swipe(['left'] * 4, interval=delay_between_clicks)
     haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
     pos = pyautogui.locate(img_path('tribute.png'), haystack, confidence=0.8)
-    if pos:
-        pos = pyautogui.center(pos)
-        pyautogui.click(pos)
-        sleep(3)
-        pyautogui.click((300, 620))
-        sleep(3)
-        empty_space.click()
+    if pos is None:
+        log('Tribute is not ready')
+        return
+    pos = pyautogui.center(pos)
+    click(pos[0], pos[1])
+    click(300, 620)
+    empty_space.click()
     go_kingdom()
 
 
