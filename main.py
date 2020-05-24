@@ -97,8 +97,8 @@ def main():
 
         global resource_collect_time
         global tribute_collect_time
-        window_switch_time = time.time()
         global wall_repair_time
+        window_switch_time = 0  # switch immediately in first loop
         while True:
 
             # dispatch troops to gather
