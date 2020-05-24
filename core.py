@@ -321,11 +321,28 @@ def go_gathering(res, half=False):
         wait(avatar)
         log('Troops go gathering {}'.format(res))
 
-#
-# def key_press(key, n=1):
-#     for _ in range(n):
-#         pyautogui.press(key, interval=1)
-#         sleep(3)
+
+def click(x, y, delay=delay_between_clicks):
+    pyautogui.click(x, y)
+    sleep(delay)
+
+
+def swipe(*args, interval=delay_between_clicks, duration=2):
+    up, down, left, right = (300, 500), (300, 700), (200, 600), (400, 600)
+    for move in args[0]:
+        if move == 'up':
+            pyautogui.moveTo(down[0], down[1])
+            pyautogui.dragTo(up[0], up[1], duration=duration)
+        elif move == 'down':
+            pyautogui.moveTo(up[0], up[1])
+            pyautogui.dragTo(down[0], down[1], duration=duration)
+        elif move == 'left':
+            pyautogui.moveTo(right[0], right[1])
+            pyautogui.dragTo(left[0], left[1], duration=duration)
+        elif move == 'right':
+            pyautogui.moveTo(left[0], left[1])
+            pyautogui.dragTo(right[0], right[1], duration=duration)
+        sleep(interval)
 
 
 def find_click(images):
@@ -380,9 +397,6 @@ def collect_tribute():
     go_kingdom()
 
 
-def click(x, y, delay=delay_between_clicks):
-    pyautogui.click(x, y)
-    sleep(delay)
 
 
 def gather_super_mine(half=False):
