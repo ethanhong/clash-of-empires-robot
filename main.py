@@ -42,7 +42,7 @@ def ally_help_monitor():
 def initialize():
     # grab game windows
     global game_windows
-    game_windows = game_windows = gw.getWindowsWithTitle('BS')
+    game_windows = gw.getWindowsWithTitle('BS')
 
     # setup game windows
     for hwnd in game_windows:
