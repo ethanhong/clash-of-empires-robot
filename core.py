@@ -358,22 +358,15 @@ def find_click(images):
 
 def collect_resource():
     res_ready_img = ['ready_food.png', 'ready_wood.png', 'ready_iron.png', 'ready_silver.png', 'ready_gold.png']
-
     go_kingdom()
     go_castle()
-
-    empty_space.click()  # grab window focus
-
-    pyautogui.typewrite(['up', 'right', 'right'], interval=delay_between_clicks)
+    swipe(['up'] * 3 + ['right'] * 2, interval=delay_between_clicks)
     find_click(res_ready_img)
-
-    pyautogui.typewrite(['up'], interval=delay_between_clicks)
+    swipe(['up'], interval=delay_between_clicks)
     find_click(res_ready_img)
-
-    pyautogui.typewrite(['right', 'right', 'right'], interval=delay_between_clicks)
+    swipe(['right'] * 4, interval=delay_between_clicks)
     find_click(res_ready_img)
-
-    pyautogui.typewrite(['down'], interval=delay_between_clicks)
+    swipe(['down'] * 2, interval=delay_between_clicks)
     find_click(res_ready_img)
     go_kingdom()
 
