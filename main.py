@@ -21,7 +21,8 @@ def ally_help_monitor():
         elif ally_need_help():
             help_ally()
             log('Help ally complete')
-        sleep(10)
+        sleep(random.randint(0, 10))
+        sleep(random.randint(0, 10))
 
 
 # def troop_status_monitor():
