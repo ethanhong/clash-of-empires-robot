@@ -8,7 +8,7 @@ fatal_stop = False
 game_windows = []
 resource_collect_time = []
 tribute_collect_time = []
-# troop_status = []
+wall_repair_time = []
 
 
 def ally_help_monitor():
@@ -57,9 +57,7 @@ def initialize():
     for _ in game_windows:
         resource_collect_time.append(0)
         tribute_collect_time.append(0)
-    #
-    # game_init()
-    # sleep(1)  # need some time for window stable
+        wall_repair_time.append(0)
 
 
 def switch_window():
@@ -73,6 +71,7 @@ def switch_window():
 
     resource_collect_time.append(resource_collect_time.pop(0))
     tribute_collect_time.append(tribute_collect_time.pop(0))
+    wall_repair_time.append(wall_repair_time.pop(0))
     log('Window switched')
 
 
@@ -83,7 +82,6 @@ def main():
     fatal_stop = False
     threads = {
         ally_help_monitor,
-        # troop_status_monitor,
     }
     for thread in threads:
         t = threading.Thread(target=thread)
@@ -100,7 +98,7 @@ def main():
         global resource_collect_time
         global tribute_collect_time
         window_switch_time = time.time()
-        empty_slot = 0
+        global wall_repair_time
         while True:
 
             # dispatch troops to gather
@@ -133,6 +131,13 @@ def main():
                 collect_tribute()
                 tribute_collect_time[0] = time.time()
                 log('Tribute collect complete')
+
+            # repair wall
+            if repair_wall and time.time() - wall_repair_time[0] > 1800:  # every 30 minutes:
+                log('Start repair wall')
+                repair_wall()
+                wall_repair_time[0] = time.time()
+                log('Repair wall complete')
 
             # switch window
             if len(game_windows) > 1 and time.time() - window_switch_time > 600:  # every 10 minutes

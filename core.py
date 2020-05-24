@@ -395,6 +395,21 @@ def collect_tribute():
     go_kingdom()
 
 
+def repair_wall():
+    go_kingdom()
+    go_castle()
+    swipe(['left'] * 4 + ['up'] * 3 + ['left'], interval=delay_between_clicks)
+    haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
+    pos = pyautogui.locate(img_path('wall.png'), haystack, confidence=0.8)
+    if pos is None:
+        log('Can not find wll image')
+        return
+    pos = pyautogui.center(pos)
+    click(pos[0], pos[1])
+    click(338, 532)
+    click(162, 1044)
+    back.click()
+    go_kingdom()
 
 
 def gather_super_mine(half=False):

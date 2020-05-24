@@ -1,5 +1,6 @@
-# Account info
 troop_slot = 3
+# User Setting
+repair_wall = True
 
 
 # Layout setting
@@ -11,7 +12,7 @@ win_title = ['BS']
 
 
 # Robot setting
-delay_between_clicks = 3.00  # set higher when the game does not run smoothly
+delay_between_clicks = 1.00  # set higher when the game does not run smoothly
 img_match_confidence = 0.8
 multi_login_restart_delay = 600  # 10 minutes
 
