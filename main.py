@@ -147,21 +147,14 @@ def main():
                 switch_window()
                 window_switch_time = time.time()
 
-            sleep(10)
+            # abnormal detection
+            err = get_error_msg()
+            if err:
+                log('Error screen caught in main loop')
+                raise TimeoutError(err)
 
-            # # wait or next loop and
-            # n = 0
-            # while n < 60:  # about 106 seconds
-            #     if get_error_msg():  # check err_msg while waiting next loop
-            #         log('Detected error screen when waiting next main loop start')
-            #         raise TimeoutError('main.py')
-            #     n += 1
-
-            # trying to keep connection alive
-            # empty_space.click()
-
-    except IndexError:  # should be happened from getWindowsWithTitle when no wnd title can be found:
-        pass
+    # except IndexError:  # should be happened from getWindowsWithTitle when no wnd title can be found:
+    #     pass
 
     except (TimeoutError, TypeError, pyautogui.FailSafeException) as e:
         fatal_stop = True
@@ -188,36 +181,40 @@ def internet_on():
 
 def recovery(err):
     log('[Start recover flow]')
-    em = get_error_msg()
-    log('Error message:', em)
-    if em == MSG.MULTI_LOGIN:
-        log('Waiting for {} seconds to reconnect'.format(multi_login_restart_delay))
+
+    if err is not MSG:
+        err = get_error_msg()
+    log('Error message:', err)
+
+    if err == MSG.MULTI_LOGIN:
+        log('Wait for {} seconds to reconnect'.format(multi_login_restart_delay))
         sleep(multi_login_restart_delay)
         msg_confirm.click()
         sleep(60)
         empty_space.click()
         main()
 
-    elif em == MSG.CONNECTION_FAIL:
+    elif err == MSG.CONNECTION_FAIL:
         msg_confirm.click()
         sleep(60)
         empty_space.click()
         main()
 
-    elif em == MSG.ABNORMAL_NETWORK:
+    elif err == MSG.ABNORMAL_NETWORK:
         log('Checking internet status ...')
         while not internet_on():
-            sleep(1)
+            sleep(5)
         log('Internet status: OK')
         msg_confirm.click()
         sleep(60)
+        main()
 
-    elif em == MSG.LOGGED_OUT:
+    elif err == MSG.LOGGED_OUT:
         log('Checking internet status ...')
         while not internet_on():
-            sleep(1)
+            sleep(5)
         log('Internet status: OK')
-        pos = pyautogui.locateCenterOnScreen(img_path('coe_icon.png'), confidence=0.99)
+        pos = pyautogui.locateCenterOnScreen(img_path('coe_icon.png'), confidence=0.9)
         pyautogui.click(pos)
         sleep(60)
         main()

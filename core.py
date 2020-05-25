@@ -22,6 +22,7 @@ class MSG:
     MULTI_LOGIN = 'multi login'
     ABNORMAL_NETWORK = 'abnormal network'
     LOGGED_OUT = 'logged out'
+    LEVEL_UP = 'level up'
 
 
 class ResType:
@@ -257,23 +258,21 @@ def update_troop_status():
 
 
 def get_error_msg():
+    msg_area = (163, 505, 445, 539)
     err_screens = {
-        MSG.CONNECTION_FAIL: 'msg_connect_fail.png',
-        MSG.MULTI_LOGIN: 'msg_multi_login.png',
-        MSG.ABNORMAL_NETWORK: 'msg_abnormal_network.png',
+        MSG.CONNECTION_FAIL: ('msg_connect_fail.png', msg_area),
+        MSG.MULTI_LOGIN: ('msg_multi_login.png', msg_area),
+        MSG.ABNORMAL_NETWORK: ('msg_abnormal_network.png', msg_area),
+        MSG.LOGGED_OUT: ('coe_icon.png', game_screen),
+        MSG.LEVEL_UP: ('msg_confirm.png', game_screen),
     }
     result = None
-    msg_area = (163, 505, 445, 539)
-    hay = pyautogui.screenshot().crop(msg_area)
 
-    for msg, img in err_screens.items():
-        if pyautogui.locate(img_path(img_path(img)), hay, confidence=0.99, grayscale=True):
+    for msg, (ndl, area) in err_screens.items():
+        haystack = pyautogui.screenshot().crop(area)
+        if pyautogui.locate(img_path(img_path(ndl)), haystack, confidence=0.9):
             result = msg
             break
-
-    if pyautogui.locateOnScreen(img_path('coe_icon.png'), confidence=0.99):
-        result = MSG.LOGGED_OUT
-
     return result
 
 
