@@ -425,7 +425,7 @@ def gather_super_mine(half=False):
         except TimeoutError:
             continue
     else:
-        go_castle()
+        go_kingdom()
         log('No super mine available')
         return False
     screen_center.click()
