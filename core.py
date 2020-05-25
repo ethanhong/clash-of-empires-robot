@@ -346,14 +346,13 @@ def swipe(*args, interval=delay_between_clicks, duration=2):
 
 
 def find_click(images):
-    haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
+    haystack = pyautogui.screenshot().crop(game_screen)
     for img in images:
         pos = pyautogui.locate(img_path(img), haystack, confidence=0.8)
         if pos:
             pos = pyautogui.center(pos)
-            pyautogui.click(pos)
+            click(pos[0], pos[1])
             images.remove(img)
-            sleep(3)
 
 
 def collect_resource():
@@ -374,12 +373,12 @@ def collect_resource():
 def collect_tribute():
     go_kingdom()
     go_castle()
-    empty_space.click()  # grab window focus
     swipe(['left'] * 4, interval=delay_between_clicks)
-    haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
+    haystack = pyautogui.screenshot().crop(game_screen)
     pos = pyautogui.locate(img_path('tribute.png'), haystack, confidence=0.8)
     if pos is None:
         log('Tribute is not ready')
+        go_kingdom()
         return
     pos = pyautogui.center(pos)
     click(pos[0], pos[1])
@@ -393,7 +392,7 @@ def repair_wall():
     go_kingdom()
     go_castle()
     swipe(['left'] * 4 + ['up'] * 3 + ['left'], interval=delay_between_clicks)
-    haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
+    haystack = pyautogui.screenshot().crop(game_screen)
     pos = pyautogui.locate(img_path('wall.png'), haystack, confidence=0.8)
     if pos is None:
         log('Can not find wall image')
