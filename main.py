@@ -219,6 +219,11 @@ def recovery(err):
         sleep(60)
         main()
 
+    elif err == MSG.LEVEL_UP:
+        click(298, 864, delay=5)
+        go_kingdom()
+        main()
+
     else:
         log('Can not recognise the error')
         pyautogui.screenshot().save('err_' + time.strftime('%m%d%H%M%S', time.localtime()) + '.png')
