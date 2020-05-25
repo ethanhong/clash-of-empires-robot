@@ -384,6 +384,7 @@ def collect_tribute():
     pos = pyautogui.center(pos)
     click(pos[0], pos[1])
     click(300, 620)
+    sleep(3)
     empty_space.click()
     go_kingdom()
 
