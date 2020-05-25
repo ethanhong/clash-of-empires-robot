@@ -4,6 +4,7 @@ from time import sleep, perf_counter
 import PIL
 import pyautogui
 import pygetwindow as gw
+import pytesseract
 
 from parameter import *
 
@@ -18,9 +19,9 @@ from parameter import *
 
 
 class MSG:
-    CONNECTION_FAIL = 'connection fail'
-    MULTI_LOGIN = 'multi login'
-    ABNORMAL_NETWORK = 'abnormal network'
+    CONNECTION_FAIL = 'Network connection failed. reconnect?'
+    MULTI_LOGIN = 'Account has logged in other location'
+    ABNORMAL_NETWORK = 'Abnormal network. Please check the network and restart the game.'
     LOGGED_OUT = 'logged out'
     LEVEL_UP = 'level up'
 
@@ -257,22 +258,32 @@ def update_troop_status():
         return None
 
 
+def img2str(im):
+    im = PIL.ImageOps.invert(im)
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    return pytesseract.image_to_string(im)
+
+
 def get_error_msg():
-    msg_area = (163, 505, 445, 539)
-    err_screens = {
-        MSG.CONNECTION_FAIL: ('msg_connect_fail.png', msg_area),
-        MSG.MULTI_LOGIN: ('msg_multi_login.png', msg_area),
-        MSG.ABNORMAL_NETWORK: ('msg_abnormal_network.png', msg_area),
-        MSG.LOGGED_OUT: ('coe_icon.png', game_screen),
-        MSG.LEVEL_UP: ('msg_confirm.png', game_screen),
+    err_images = {
+        MSG.LOGGED_OUT: 'coe_icon.png',
+        MSG.LEVEL_UP: 'msg_confirm.png',
     }
     result = None
-
-    for msg, (ndl, area) in err_screens.items():
-        haystack = pyautogui.screenshot().crop(area)
-        if pyautogui.locate(img_path(img_path(ndl)), haystack, confidence=0.9):
+    for msg, img in err_images.items():
+        haystack = pyautogui.screenshot().crop(game_screen)
+        if pyautogui.locate(img_path(img), haystack, confidence=0.9):
             result = msg
             break
+    else:
+        msg_box = (60, 500, 540, 600)
+        err_messages = [MSG.CONNECTION_FAIL,
+                        MSG.MULTI_LOGIN,
+                        MSG.ABNORMAL_NETWORK]
+        img = pyautogui.screenshot().crop(msg_box)
+        message = ' '.join(img2str(img).split())
+        if message in err_messages:
+            result = message
     return result
 
 
