@@ -136,7 +136,7 @@ def main():
                 log('Tribute collect complete')
 
             # repair wall
-            if repair_wall and time.time() - wall_repair_time[0] > 1800:  # every 30 minutes:
+            if wall_repair and time.time() - wall_repair_time[0] > 1800:  # every 30 minutes:
                 log('Start repair wall')
                 repair_wall()
                 wall_repair_time[0] = time.time()

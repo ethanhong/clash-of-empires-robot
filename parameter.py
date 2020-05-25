@@ -1,6 +1,6 @@
 # User Setting
 troop_slot = 3
-repair_wall = True
+wall_repair = False
 gather_silver_super_mine = False
 
 
