@@ -9,15 +9,6 @@ import pytesseract
 from parameter import *
 
 
-# class Screen:
-#     CASTLE = 'castle'
-#     KINGDOM = 'kingdom'
-#     DESERT = 'desert'
-#     NO_AVATAR = 'no avatar'
-#     ERROR = 'error'
-#     UNKNOWN = 'unknown'
-
-
 class MSG:
     CONNECTION_FAIL = 'Network connection failed. reconnect?'
     MULTI_LOGIN = 'Account has logged in other location'
