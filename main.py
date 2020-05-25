@@ -135,10 +135,8 @@ def main():
                 window_switch_time = time.time()
 
             # abnormal detection
-            err = get_error_msg()
-            if err:
-                log('Error screen caught in main loop')
-                raise TimeoutError(err)
+            if get_error_msg():
+                raise TimeoutError('Error screen caught in main loop')
 
     # except IndexError:  # should be happened from getWindowsWithTitle when no wnd title can be found:
     #     pass
@@ -167,11 +165,10 @@ def internet_on():
 
 
 def recovery(err):
-    log('[Start recover flow]')
+    log('[Start recover flow]:', err)
 
-    if err is not MSG:
-        err = get_error_msg()
-    log('Error message:', err)
+    err = get_error_msg()
+    log('[Error message]:', err)
 
     if err == MSG.MULTI_LOGIN:
         log('Wait for {} seconds to reconnect'.format(multi_login_restart_delay))
