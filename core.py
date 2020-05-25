@@ -412,28 +412,21 @@ def repair_wall():
 
 
 def gather_super_mine(half=False):
-    coord = [
-        (153, 560),  # farm
-        (445, 560),  # sawmill
-        (153, 828),  # iron mine
-    ]
-    if gather_silver_super_mine:
-        coord.append((445, 828))  # silver mine
-
     click(532, 1051)  # alliance
     click(91, 595)  # territory
     click(363, 175)  # alliance super mine
-    for c in coord:
-        click(c[0], c[1])
-        try:
-            wait(castle)
-            break
-        except TimeoutError:
-            continue
+
+    haystack = pyautogui.screenshot().crop(game_screen)
+    img = img_path('super_mine_link.png')
+    pos = pyautogui.locate(img, haystack, confidence=0.9)
+    if pos:
+        pos = pyautogui.center(pos)
+        click(pos[0], pos[1])
     else:
         go_kingdom()
         log('No super mine available')
         return False
+
     screen_center.click()
     sleep(3)
     if gather.visible():
