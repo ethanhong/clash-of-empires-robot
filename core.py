@@ -277,9 +277,12 @@ def get_error_msg():
 
 
 def go_kingdom():
-    while back.visible():
-        back.click()
-        sleep(1)
+    for _ in range(5):  # try 5 times then abort
+        if back.visible():
+            back.click()
+            sleep(1)
+        else:
+            break
     try:
         wait(castle)
     except TimeoutError:
@@ -289,9 +292,12 @@ def go_kingdom():
 
 
 def go_castle():
-    while back.visible():
-        back.click()
-        sleep(1)
+    for _ in range(5):  # try 5 times then abort
+        if back.visible():
+            back.click()
+            sleep(1)
+        else:
+            break
     try:
         wait(kingdom)
     except TimeoutError:

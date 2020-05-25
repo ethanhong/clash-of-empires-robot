@@ -115,12 +115,12 @@ def main():
                 empty_slot = troop_slot - len(troop_status)
             # log('[Main Loop] troop_status = {}'.format(troop_status))
 
-            if empty_slot > 0:
-                gather_super_mine(half=False if empty_slot == 1 else True)
-                try:
-                    empty_slot = troop_slot - len(update_troop_status())
-                except TypeError:
-                    empty_slot = 0
+            if empty_slot > 0 and gather_super_mine(half=False if empty_slot == 1 else True):
+                empty_slot -= 1
+                # try:
+                #     empty_slot = troop_slot - len(update_troop_status())
+                # except TypeError:
+                #     empty_slot = 0
 
             while empty_slot > 0:
                 go_gathering(random.choice(res), half=False if empty_slot == 1 else True)
@@ -222,6 +222,11 @@ def recovery(err):
         pos = pyautogui.locateCenterOnScreen(img_path('coe_icon.png'), confidence=0.9)
         pyautogui.click(pos)
         sleep(60)
+        main()
+
+    elif err == MSG.LEVEL_UP:
+        click(298, 864, delay=5)
+        go_kingdom()
         main()
 
     else:
