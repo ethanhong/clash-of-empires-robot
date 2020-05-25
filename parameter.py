@@ -1,7 +1,7 @@
 # User Setting
 troop_slot = 3
 wall_repair = False
-gather_silver_super_mine = False
+super_mine_gathering = False
 
 
 # Layout setting

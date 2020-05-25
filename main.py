@@ -101,7 +101,9 @@ def main():
                 empty_slot = troop_slot - len(troop_status)
             # log('[Main Loop] troop_status = {}'.format(troop_status))
 
-            if empty_slot > 0 and gather_super_mine(half=False if empty_slot == 1 else True):
+            if super_mine_gathering \
+                    and empty_slot > 0 \
+                    and gather_super_mine(half=False if empty_slot == 1 else True):
                 empty_slot -= 1
 
             while empty_slot > 0:
