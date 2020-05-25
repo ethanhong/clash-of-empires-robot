@@ -395,7 +395,8 @@ def repair_wall():
     haystack = pyautogui.screenshot().crop((0, 0, game_window_size[0], game_window_size[1]))
     pos = pyautogui.locate(img_path('wall.png'), haystack, confidence=0.8)
     if pos is None:
-        log('Can not find wll image')
+        log('Can not find wall image')
+        go_kingdom()
         return
     pos = pyautogui.center(pos)
     click(pos[0], pos[1])
