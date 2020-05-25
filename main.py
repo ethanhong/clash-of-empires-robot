@@ -81,7 +81,7 @@ def main():
     # initialize threads
     fatal_stop = False
     threads = {
-        ally_help_monitor,
+        # ally_help_monitor,
     }
     for thread in threads:
         t = threading.Thread(target=thread)
@@ -100,6 +100,11 @@ def main():
         global wall_repair_time
         window_switch_time = 0  # switch immediately in first loop
         while True:
+
+            # ally help
+            if ally_need_help():
+                help_ally()
+                log('Help ally complete')
 
             # dispatch troops to gather
             res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
