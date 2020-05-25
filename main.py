@@ -25,20 +25,6 @@ def ally_help_monitor():
         sleep(random.randint(0, 10))
 
 
-# def troop_status_monitor():
-#     global troop_status
-#     log('[Thread start] troop status monitor')
-#     while True:
-#         if fatal_stop:
-#             log('Stop troop_status_monitor')
-#             break
-#         temp = update_troop_status()
-#         if temp is None:
-#             pass
-#         else:
-#             troop_status = temp
-
-
 def initialize():
     # grab game windows
     global game_windows
@@ -117,10 +103,6 @@ def main():
 
             if empty_slot > 0 and gather_super_mine(half=False if empty_slot == 1 else True):
                 empty_slot -= 1
-                # try:
-                #     empty_slot = troop_slot - len(update_troop_status())
-                # except TypeError:
-                #     empty_slot = 0
 
             while empty_slot > 0:
                 go_gathering(random.choice(res), half=False if empty_slot == 1 else True)
