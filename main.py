@@ -9,6 +9,7 @@ game_windows = []
 resource_collect_time = []
 tribute_collect_time = []
 wall_repair_time = []
+tribute_collect_interval = []
 
 
 def ally_help_monitor():
@@ -40,16 +41,19 @@ def initialize():
     # initialize parameters
     global resource_collect_time
     global tribute_collect_time
+    global tribute_collect_interval
     for _ in game_windows:
         resource_collect_time.append(0)
         tribute_collect_time.append(0)
         wall_repair_time.append(0)
+        tribute_collect_interval.append(default_tribute_collect_interval)
 
 
 def switch_window():
     global game_windows
     global resource_collect_time
     global tribute_collect_time
+    global tribute_collect_interval
 
     game_windows.append(game_windows.pop(0))
     game_windows[-1].minimize()
@@ -58,6 +62,7 @@ def switch_window():
     resource_collect_time.append(resource_collect_time.pop(0))
     tribute_collect_time.append(tribute_collect_time.pop(0))
     wall_repair_time.append(wall_repair_time.pop(0))
+    tribute_collect_interval.append(tribute_collect_interval.pop(0))
     log('Window switched')
 
 
@@ -84,6 +89,7 @@ def main():
         global resource_collect_time
         global tribute_collect_time
         global wall_repair_time
+        global tribute_collect_interval
         window_switch_time = 0  # switch immediately in first loop
         while True:
 
@@ -118,11 +124,11 @@ def main():
                 log('Resources collect complete')
 
             # collect tribute
-            if time.time() - tribute_collect_time[0] > 1800:  # every 30 minutes:
+            if time.time() - tribute_collect_time[0] > tribute_collect_interval[0]:
                 log('Go collecting tribute')
-                collect_tribute()
+                tribute_collect_interval[0] = collect_tribute()
                 tribute_collect_time[0] = time.time()
-                log('Tribute collect complete')
+                log('Tribute collect complete. Will be back in', secs2hms(tribute_collect_interval[0], 's'))
 
             # repair wall
             if wall_repair and time.time() - wall_repair_time[0] > 1800:  # every 30 minutes:

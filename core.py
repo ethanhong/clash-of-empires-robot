@@ -377,22 +377,60 @@ def collect_resource():
     go_kingdom()
 
 
+# def collect_tribute():
+#     go_kingdom()
+#     go_castle()
+#     swipe(['left'] * 4, interval=delay_between_clicks)
+#     haystack = pyautogui.screenshot().crop(game_screen)
+#     pos = pyautogui.locate(img_path('tribute.png'), haystack, confidence=0.8)
+#     if pos is None:
+#         log('Tribute is not ready')
+#         go_kingdom()
+#         return
+#     pos = pyautogui.center(pos)
+#     click(pos[0], pos[1])
+#     click(300, 620)
+#     sleep(3)
+#     empty_space.click()
+#     go_kingdom()
+
+
+def get_tribute_countdown():
+    msg_box = (243, 597, 356, 690)
+    try:
+        img = pyautogui.screenshot().crop(msg_box)
+        img = img.point(lambda i: i < 100 and 255)
+        s = img2str(img).split()[1].split(':')
+        second = hms2secs(int(s[0]), int(s[1]), int(s[2]))
+    except IndexError:
+        second = None
+    return second
+
+
 def collect_tribute():
+    timer = None
     go_kingdom()
     go_castle()
     swipe(['left'] * 4, interval=delay_between_clicks)
     haystack = pyautogui.screenshot().crop(game_screen)
     pos = pyautogui.locate(img_path('tribute.png'), haystack, confidence=0.8)
+
     if pos is None:
         log('Tribute is not ready')
-        go_kingdom()
-        return
-    pos = pyautogui.center(pos)
-    click(pos[0], pos[1])
-    click(300, 620)
-    sleep(3)
-    empty_space.click()
+    else:
+        pos = pyautogui.center(pos)
+        click(pos[0], pos[1])
+        click(300, 620)
+        sleep(3)
+        timer = get_tribute_countdown()
+        empty_space.click()
+
     go_kingdom()
+
+    if timer is None:
+        return default_tribute_collect_interval
+    else:
+        return timer
 
 
 def repair_wall():
@@ -447,3 +485,17 @@ def gather_super_mine(half=False):
         wait(avatar)
         log('Go gathering super mine')
     return True
+
+
+def hms2secs(h, m, s):
+    return h * 3600 + m * 60 + s
+
+
+def secs2hms(*args):
+    secs = args[0]
+    h = secs // 3600
+    m = (secs - h * 3600) // 60
+    s = secs % 60
+    if args[1] == 's':
+        return '{}:{}:{}'.format(h, m, s)
+    return h, m, s
