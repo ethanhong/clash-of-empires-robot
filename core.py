@@ -492,10 +492,10 @@ def gather_super_mine(half=False):
     click(91, 595)  # territory
     click(363, 175)  # alliance super mine
 
-    coordinate_locations = [(70, 550, 150, 570),  # farm
-                            (360, 550, 440, 570),  # sawmill
-                            (70, 825, 150, 845),  # iron mine
-                            (360, 825, 440, 845)]  # silver mine
+    coordinate_locations = [(70, 540, 150, 570),  # farm
+                            (360, 540, 440, 570),  # sawmill
+                            (70, 815, 150, 845),  # iron mine
+                            (360, 815, 440, 845)]  # silver mine
     screenshot = pyautogui.screenshot()
     for loc in coordinate_locations:
         im = screenshot.crop(loc)
