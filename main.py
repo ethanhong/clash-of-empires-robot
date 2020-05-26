@@ -41,6 +41,7 @@ def initialize():
     # initialize parameters
     global resource_collect_time
     global tribute_collect_time
+    global wall_repair_time
     global tribute_collect_interval
     for _ in game_windows:
         resource_collect_time.append(0)
@@ -53,6 +54,7 @@ def switch_window():
     global game_windows
     global resource_collect_time
     global tribute_collect_time
+    global wall_repair_time
     global tribute_collect_interval
 
     game_windows.append(game_windows.pop(0))
@@ -131,7 +133,7 @@ def main():
                 log('Tribute collect complete. Will be back in', secs2hms(tribute_collect_interval[0], 's'))
 
             # repair wall
-            if wall_repair and time.time() - wall_repair_time[0] > 1800:  # every 30 minutes:
+            if wall_repair and time.time() - wall_repair_time[0] > 1800:  # every 30 minutes
                 log('Start repair wall')
                 repair_wall()
                 wall_repair_time[0] = time.time()
