@@ -140,7 +140,7 @@ def main():
                 log('Repair wall complete')
 
             # switch window
-            if len(game_windows) > 1 and time.time() - window_switch_time > 600:  # every 10 minutes
+            if len(game_windows) > 1 and time.time() - window_switch_time > 60:  # every minute
                 switch_window()
                 window_switch_time = time.time()
 
