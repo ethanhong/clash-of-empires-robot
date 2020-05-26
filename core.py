@@ -250,7 +250,6 @@ def update_troop_status():
 
 
 def img2str(im):
-    im = PIL.ImageOps.invert(im)
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
     return pytesseract.image_to_string(im)
 
@@ -272,6 +271,7 @@ def get_error_msg():
                         MSG.MULTI_LOGIN,
                         MSG.ABNORMAL_NETWORK]
         img = pyautogui.screenshot().crop(msg_box)
+        img = PIL.ImageOps.invert(img)
         message = ' '.join(img2str(img).split())
         if message in err_messages:
             result = message
