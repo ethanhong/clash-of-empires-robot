@@ -451,19 +451,60 @@ def repair_wall():
     go_kingdom()
 
 
+# def gather_super_mine(half=False):
+#     click(532, 1051)  # alliance
+#     click(91, 595)  # territory
+#     click(363, 175)  # alliance super mine
+#
+#     haystack = pyautogui.screenshot().crop(game_screen)
+#     img = img_path('super_mine_link.png')
+#     pos = pyautogui.locate(img, haystack, confidence=0.9)
+#     if pos:
+#         pos = pyautogui.center(pos)
+#         click(pos[0], pos[1])
+#     else:
+#         go_kingdom()
+#         log('No super mine available')
+#         return False
+#
+#     screen_center.click()
+#     sleep(3)
+#     if gather.visible():
+#         gather.click()
+#     else:
+#         log('Troop in super mine already')
+#         return False
+#     wait(march)
+#     if train.visible():
+#         back.click()
+#         log('No troops for gathering')
+#     else:
+#         if half:
+#             half_troop.click()
+#         march.click()
+#         wait(avatar)
+#         log('Go gathering super mine')
+#     return True
+
+
 def gather_super_mine(half=False):
     click(532, 1051)  # alliance
     click(91, 595)  # territory
     click(363, 175)  # alliance super mine
 
-    haystack = pyautogui.screenshot().crop(game_screen)
-    img = img_path('super_mine_link.png')
-    pos = pyautogui.locate(img, haystack, confidence=0.9)
-    if pos:
-        pos = pyautogui.center(pos)
-        click(pos[0], pos[1])
+    coordinate_locations = [(70, 550, 150, 570),  # farm
+                            (360, 550, 440, 570),  # sawmill
+                            (70, 825, 150, 845),  # iron mine
+                            (360, 825, 440, 845)]  # silver mine
+    screenshot = pyautogui.screenshot()
+    for loc in coordinate_locations:
+        im = screenshot.crop(loc)
+        im = PIL.ImageOps.invert(im)
+        result = img2str(im)
+        if result == 'Coordinate':
+            click((loc[0] + loc[2]) // 2, (loc[1] + loc[3]) // 2)
+            break
     else:
-        go_kingdom()
         log('No super mine available')
         return False
 
