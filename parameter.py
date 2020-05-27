@@ -1,7 +1,7 @@
 # User Setting
 troop_slot = 3
 wall_repair = False
-super_mine_gathering = False
+super_mine_gathering = True
 default_tribute_collect_interval = 600
 
 
