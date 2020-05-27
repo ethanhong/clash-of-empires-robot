@@ -4,7 +4,7 @@ import time
 
 from core import *
 
-fatal_stop = False
+# fatal_stop = False
 game_windows = []
 resource_collect_time = []
 tribute_collect_time = []
@@ -12,18 +12,18 @@ wall_repair_time = []
 tribute_collect_interval = []
 
 
-def ally_help_monitor():
-    global fatal_stop
-    log('[Thread start] ally help monitor')
-    while True:
-        if fatal_stop:
-            log('Stop ally_help_monitor')
-            break
-        elif ally_need_help():
-            help_ally()
-            log('Help ally complete')
-        sleep(random.randint(0, 10))
-        sleep(random.randint(0, 10))
+# def ally_help_monitor():
+#     global fatal_stop
+#     log('[Thread start] ally help monitor')
+#     while True:
+#         if fatal_stop:
+#             log('Stop ally_help_monitor')
+#             break
+#         elif ally_need_help():
+#             help_ally()
+#             log('Help ally complete')
+#         sleep(random.randint(0, 10))
+#         sleep(random.randint(0, 10))
 
 
 def initialize():
@@ -69,16 +69,16 @@ def switch_window():
 
 
 def main():
-    global fatal_stop
+    # global fatal_stop
 
     # initialize threads
-    fatal_stop = False
-    threads = {
-        # ally_help_monitor,
-    }
-    for thread in threads:
-        t = threading.Thread(target=thread)
-        t.start()
+    # fatal_stop = False
+    # threads = {
+    #     # ally_help_monitor,
+    # }
+    # for thread in threads:
+    #     t = threading.Thread(target=thread)
+    #     t.start()
 
     # main loop starts from here
     try:
@@ -152,15 +152,16 @@ def main():
     #     pass
 
     except (TimeoutError, TypeError, pyautogui.FailSafeException) as e:
-        fatal_stop = True
-        while threading.activeCount() > 1:  # wait for thread stopping
-            continue
+        # fatal_stop = True
+        # while threading.activeCount() > 1:  # wait for thread stopping
+        #     log(threading.activeCount())
+        #     continue
         recovery(e)
 
     except (KeyboardInterrupt, SystemExit):  # interrupt by user
-        fatal_stop = True
-        while threading.activeCount() > 1:  # wait for thread stopping
-            continue
+        # fatal_stop = True
+        # while threading.activeCount() > 1:  # wait for thread stopping
+        #     continue
         log('Interrupt by user')
 
 
