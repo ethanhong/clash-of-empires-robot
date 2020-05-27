@@ -10,7 +10,7 @@ from parameter import *
 
 
 class MSG:
-    CONNECTION_FAIL = 'Network connection failed. reconnect?'
+    CONNECTION_FAIL = 'Network connection failed, reconnect?'
     MULTI_LOGIN = 'Account has logged in other location'
     ABNORMAL_NETWORK = 'Abnormal network. Please check the network and restart the game.'
     LOGGED_OUT = 'logged out'
