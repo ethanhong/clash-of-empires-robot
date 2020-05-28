@@ -33,18 +33,14 @@ def load_config():
 def initialize():
     # grab game windows
     global games
-    windows = gw.getWindowsWithTitle('BS')
+    all_hwnd = gw.getAllWindows()
 
     # load config file
     configs = load_config()
 
-    for hwnd in windows:
-        # load configurations by title. Use default if title is not found in config.yaml
-        if hwnd.title in configs.keys():
-            title = hwnd.title
-        else:
-            title = 'DEFAULT'
-        config = configs[title]
+    valid_hwnd = [h for h in all_hwnd if h.title in configs.keys()]
+    for hwnd in valid_hwnd:
+        config = configs[hwnd.title]
         config['hwnd'] = hwnd
         config['title'] = hwnd.title
         config['resource_collect_time'] = 0
@@ -63,6 +59,7 @@ def initialize():
     log('Configurations for each game:')
     for config in games:
         log(config)
+    log('Now in {}'.format(games[0]['title']))
 
 
 def switch_window():
