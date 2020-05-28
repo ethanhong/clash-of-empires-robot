@@ -18,12 +18,12 @@ class MSG:
 
 
 class ResType:
-    MONSTER = 0
-    CAMP = 1
-    FOOD = 2
-    WOOD = 3
-    IRON = 4
-    SILVER = 5
+    MONSTER = 'monster'
+    CAMP = 'camp'
+    FOOD = 'food'
+    WOOD = 'wood'
+    IRON = 'iron'
+    SILVER = 'silver'
 
 
 class Button:
@@ -94,7 +94,7 @@ farm = Button('', (260, 820))
 sawmill = Button('', (355, 820))
 iron_mine = Button('', (448, 820))
 slv_mine = Button('', (540, 820))
-res_coord = [monster, camp, farm, sawmill, iron_mine, slv_mine]
+res_coord = {'monster': monster, 'camp': camp, 'food': farm, 'wood': sawmill, 'iron': iron_mine, 'silver': slv_mine}
 
 # haystack areas
 game_screen = (0, 0, game_window_size[0], game_window_size[1])

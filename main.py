@@ -5,11 +5,7 @@ import time
 from core import *
 
 # fatal_stop = False
-game_windows = []
-resource_collect_time = []
-tribute_collect_time = []
-wall_repair_time = []
-tribute_collect_interval = []
+games = []
 
 
 # def ally_help_monitor():
@@ -26,46 +22,55 @@ tribute_collect_interval = []
 #         sleep(random.randint(0, 10))
 
 
+def load_config():
+    import yaml
+    with open('config.yaml', 'r') as stream:
+        config = yaml.safe_load(stream)
+    return config
+
+
 def initialize():
     # grab game windows
-    global game_windows
-    game_windows = gw.getWindowsWithTitle('BS')
+    global games
+    windows = gw.getWindowsWithTitle('BS')
 
-    # setup game windows
-    for hwnd in game_windows:
+    # load config file
+    configs = load_config()
+
+    for hwnd in windows:
+        # load configurations by title. Use default if title is not found in config.yaml
+        if hwnd.title in configs.keys():
+            title = hwnd.title
+        else:
+            title = 'DEFAULT'
+        config = configs[title]
+        config['hwnd'] = hwnd
+        config['title'] = hwnd.title
+        config['resource_collect_time'] = 0
+        config['tribute_collect_time'] = 0
+        config['wall_repair_time'] = 0
+        config['tribute_collect_interval'] = default_tribute_collect_interval
+        games.append(config)
+
+        # setup game windows
         hwnd.moveTo(0, 0)
         hwnd.resizeTo(game_window_size[0], game_window_size[1])
         hwnd.minimize()
-    game_windows[0].restore()
 
-    # initialize parameters
-    global resource_collect_time
-    global tribute_collect_time
-    global wall_repair_time
-    global tribute_collect_interval
-    for _ in game_windows:
-        resource_collect_time.append(0)
-        tribute_collect_time.append(0)
-        wall_repair_time.append(0)
-        tribute_collect_interval.append(default_tribute_collect_interval)
+    games[0]['hwnd'].restore()
+    log('Initialization finished. There are {} game window(s) found.'.format(len(games)))
+    log('Configurations for each game:')
+    for config in games:
+        log(config)
 
 
 def switch_window():
-    global game_windows
-    global resource_collect_time
-    global tribute_collect_time
-    global wall_repair_time
-    global tribute_collect_interval
-
-    game_windows.append(game_windows.pop(0))
-    game_windows[-1].minimize()
-    game_windows[0].restore()
-
-    resource_collect_time.append(resource_collect_time.pop(0))
-    tribute_collect_time.append(tribute_collect_time.pop(0))
-    wall_repair_time.append(wall_repair_time.pop(0))
-    tribute_collect_interval.append(tribute_collect_interval.pop(0))
-    log('Window switched')
+    global games
+    games[0]['hwnd'].minimize()
+    games.append(games.pop(0))
+    games[0]['hwnd'].restore()
+    log('Window switched to', games[0]['title'])
+    log(games[0])
 
 
 def main():
@@ -80,6 +85,7 @@ def main():
     #     t = threading.Thread(target=thread)
     #     t.start()
 
+    global games
     # main loop starts from here
     try:
         # go kingdom screen so we can update troops status
@@ -88,11 +94,7 @@ def main():
         # wait for background threads to update status
         sleep(5)
 
-        global resource_collect_time
-        global tribute_collect_time
-        global wall_repair_time
-        global tribute_collect_interval
-        window_switch_time = 0  # switch immediately in first loop
+        window_switch_timestamp = 0  # switch immediately in first loop
         while True:
 
             # ally help
@@ -101,48 +103,47 @@ def main():
                 log('Help ally complete')
 
             # dispatch troops to gather
-            res = [ResType.FOOD, ResType.WOOD, ResType.IRON]
             troop_status = update_troop_status()
             if troop_status is None:
                 empty_slot = 0
             else:
-                empty_slot = troop_slot - len(troop_status)
+                empty_slot = games[0]['troop_slot'] - len(troop_status)
             # log('[Main Loop] troop_status = {}'.format(troop_status))
 
-            if super_mine_gathering \
+            if games[0]['super_mine_gathering'] \
                     and empty_slot > 0 \
                     and gather_super_mine(half=False if empty_slot == 1 else True):
                 empty_slot -= 1
 
             while empty_slot > 0:
-                go_gathering(random.choice(res), half=False if empty_slot == 1 else True)
+                go_gathering(random.choice(games[0]['resource_type']), half=False if empty_slot == 1 else True)
                 empty_slot -= 1
 
             # collect resources
-            if time.time() - resource_collect_time[0] > 1200:  # every 20 minutes
+            if time.time() - games[0]['resource_collect_time'] > 1200:  # every 20 minutes
                 log('Go collecting resources')
                 collect_resource()
-                resource_collect_time[0] = time.time()
+                games[0]['resource_collect_time'] = time.time()
                 log('Resources collect complete')
 
             # collect tribute
-            if time.time() - tribute_collect_time[0] > tribute_collect_interval[0]:
+            if time.time() - games[0]['tribute_collect_time'] > games[0]['tribute_collect_interval']:
                 log('Go collecting tribute')
-                tribute_collect_interval[0] = collect_tribute()
-                tribute_collect_time[0] = time.time()
-                log('Tribute collect complete. Will be back in', secs2hms(tribute_collect_interval[0], 's'))
+                games[0]['tribute_collect_interval'] = collect_tribute()
+                games[0]['tribute_collect_time'] = time.time()
+                log('Tribute collect complete. Will be back in', secs2hms(games[0]['tribute_collect_interval'], 's'))
 
             # repair wall
-            if wall_repair and time.time() - wall_repair_time[0] > 1800:  # every 30 minutes
+            if games[0]['wall_repair'] and time.time() - games[0]['wall_repair_time'] > 1800:  # every 30 minutes
                 log('Start repair wall')
                 repair_wall()
-                wall_repair_time[0] = time.time()
+                games[0]['wall_repair_time'] = time.time()
                 log('Repair wall complete')
 
             # switch window
-            if len(game_windows) > 1 and time.time() - window_switch_time > 60:  # every minute
+            if len(games) > 1 and time.time() - window_switch_timestamp > 60:  # every minute
                 switch_window()
-                window_switch_time = time.time()
+                window_switch_timestamp = time.time()
 
             # abnormal detection
             if get_error_msg():
@@ -171,7 +172,7 @@ def internet_on():
     try:
         urllib.request.urlopen('http://216.58.192.142', timeout=10)
         return True
-    except urllib.error.URLError as err:
+    except urllib.error.URLError:
         return False
 
 
