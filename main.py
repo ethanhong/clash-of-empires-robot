@@ -1,5 +1,5 @@
 import random
-import threading
+# import threading
 import time
 
 from core import *
