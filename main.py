@@ -2,6 +2,8 @@ import random
 # import threading
 import time
 
+import yaml
+
 from core import *
 
 # fatal_stop = False
@@ -23,7 +25,6 @@ games = []
 
 
 def load_config():
-    import yaml
     with open('config.yaml', 'r') as stream:
         config = yaml.safe_load(stream)
     return config
