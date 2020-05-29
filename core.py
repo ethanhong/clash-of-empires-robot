@@ -249,9 +249,9 @@ def update_troop_status():
         return None
 
 
-def img2str(im):
+def img2str(im, config=None):
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-    return pytesseract.image_to_string(im)
+    return pytesseract.image_to_string(im, config=config)
 
 
 def get_error_msg():
