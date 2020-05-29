@@ -398,16 +398,27 @@ def collect_resource():
 
 
 def tribute_countdown():
-    msg_box = (243, 597, 356, 690)
+    msg_box = (243, 640, 356, 690)
     try:
         img = pyautogui.screenshot().crop(msg_box)
         img = img.point(lambda i: i < 100 and 255)
-        s = img2str(img).split()[1].split(':')
+        s = img2str(img, config=r'--psm 10')
+        s = s.split(':')
         second = hms2secs(int(s[0]), int(s[1]), int(s[2]))
     except (IndexError, ValueError) as e:
         log('Error occurred in get_tribute_countdown():', e)
         second = None
     return second
+    # msg_box = (243, 597, 356, 690)
+    # try:
+    #     img = pyautogui.screenshot().crop(msg_box)
+    #     img = img.point(lambda i: i < 100 and 255)
+    #     s = img2str(img).split()[1].split(':')
+    #     second = hms2secs(int(s[0]), int(s[1]), int(s[2]))
+    # except (IndexError, ValueError) as e:
+    #     log('Error occurred in get_tribute_countdown():', e)
+    #     second = None
+    # return second
 
 
 def collect_tribute():
