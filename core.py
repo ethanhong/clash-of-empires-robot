@@ -402,7 +402,8 @@ def get_tribute_countdown():
         img = img.point(lambda i: i < 100 and 255)
         s = img2str(img).split()[1].split(':')
         second = hms2secs(int(s[0]), int(s[1]), int(s[2]))
-    except IndexError:
+    except (IndexError, ValueError) as e:
+        log('Error occurred in get_tribute_countdown():', e)
         second = None
     return second
 
