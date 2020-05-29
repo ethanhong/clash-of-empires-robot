@@ -9,7 +9,7 @@ BS2:
   troop_slot: 3
   wall_repair: False
   super_mine_gathering: False
-  resource_type: ['iron']
+  resource_type: ['wood']
 
 BS3:
   troop_slot: 3
