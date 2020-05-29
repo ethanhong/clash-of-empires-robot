@@ -324,6 +324,8 @@ def go_gathering(res, half=False):
     else:
         if half:
             half_troop.click()
+        click(90, 1030)  # group selection
+        click(420, 600)  # ordinary_slot_preferred
         march.click()
         wait(avatar)
         log('Troops go gathering {}'.format(res))
