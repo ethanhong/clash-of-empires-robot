@@ -14,7 +14,7 @@ BS2:
 BS3:
   troop_slot: 3
   wall_repair: False
-  super_mine_gathering: True
+  super_mine_gathering: False
   resource_type: ['food']
 
 BS4:
