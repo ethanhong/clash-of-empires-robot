@@ -395,7 +395,7 @@ def collect_resource():
 #     go_kingdom()
 
 
-def get_tribute_countdown():
+def tribute_countdown():
     msg_box = (243, 597, 356, 690)
     try:
         img = pyautogui.screenshot().crop(msg_box)
@@ -409,7 +409,7 @@ def get_tribute_countdown():
 
 
 def collect_tribute():
-    timer = None
+    countdown = None
     go_kingdom()
     go_castle()
     swipe(['left'] * 4, interval=delay_between_clicks)
@@ -423,15 +423,15 @@ def collect_tribute():
         click(pos[0], pos[1])
         click(300, 620)
         sleep(3)
-        timer = get_tribute_countdown()
+        countdown = tribute_countdown()
         empty_space.click()
 
     go_kingdom()
 
-    if timer is None:
+    if countdown is None:
         return default_tribute_collect_interval
     else:
-        return timer
+        return countdown
 
 
 def repair_wall():
