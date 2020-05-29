@@ -1,10 +1,4 @@
 ---
-DEFAULT:
-  troop_slot: 2
-  wall_repair: False
-  super_mine_gathering: False
-  resource_type: ['food', 'wood']
-
 BS1:
   troop_slot: 3
   wall_repair: False
