@@ -70,7 +70,12 @@ def switch_window():
     games.append(games.pop(0))
     games[0]['hwnd'].restore()
     log('Window switched to', games[0]['title'])
-    log(games[0])
+    t = time.time()
+    log('resource_collect_time: {}, tribute_collect_time: {}, tribute_collect_interval: {}'
+        .format(round(t - games[0]['resource_collect_time']),
+                round(t - games[0]['tribute_collect_time']),
+                games[0]['tribute_collect_interval']))
+    # log(games[0])
 
 
 def main():
